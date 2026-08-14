@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  discordId     String   @unique
+  username      String
+  discriminator String
+  avatar        String?
+  email         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  applications  Application[]
+  adminRole     AdminRole?
+}
+
+model AdminRole {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("moderator")
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Application {
+  id          String   @id @default(cuid())
+  discordId   String
+  name        String
+  age         Int
+  discordName String
+  country     String
+  hours       Int
+  experience  String
+  status      String   @default("pending")
+  submittedAt DateTime @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+
+  @@index([discordId])
+  @@index([status])
+  @@index([submittedAt])
+}

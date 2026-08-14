@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقديم طلب</title>
+  <meta name="description" content="قدّم طلب انضمامك للسيرفر.">
+  <meta name="theme-color" content="#8b5cf6">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+        </span>
+        <span class="brand-text" data-server-name>سيرفر الديسكورد</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">الرئيسية</a>
+        <a href="apply.html" class="nav-link active">تقديم طلب</a>
+        <a href="support.html" class="nav-link">الدعم</a>
+        <a href="admin.html" class="nav-link">الأدمن</a>
+      </div>
+    </nav>
+
+    <main class="card" style="max-width:520px;width:100%;">
+      <div class="text-center mb-6">
+        <span class="eyebrow">خطوة واحدة</span>
+        <h1 class="hero-title" style="font-size:28px;">تقديم طلب الانضمام</h1>
+        <p class="hero-desc" style="font-size:15px;margin-bottom:0;">
+          املأ بياناتك بدقة. <strong style="color:var(--primary-light)">مسموح بطلب واحد فقط لكل آيدي ديسكورد.</strong>
+        </p>
+      </div>
+
+      <div id="statusBanner" class="status-banner hidden"></div>
+
+      <form id="applyForm" novalidate>
+        <div class="form-group" id="field-name">
+          <label class="form-label" for="name">الاسم الكامل</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="اسمك الكامل" autocomplete="name" minlength="3" maxlength="40" required>
+          <p class="form-error">اكتب اسمك بالكامل (3 أحرف على الأقل)</p>
+        </div>
+
+        <div class="form-group" id="field-age">
+          <label class="form-label" for="age">العمر</label>
+          <input type="number" id="age" name="age" class="form-input" placeholder="مثال: 18" min="8" max="99" required>
+          <p class="form-error">اكتب عمر صحيح (بين 8 و 99)</p>
+        </div>
+
+        <div class="form-group" id="field-discordName">
+          <label class="form-label" for="discordName">اسمك في ديسكورد</label>
+          <input type="text" id="discordName" name="discordName" class="form-input" placeholder="مثال: username" autocomplete="off" minlength="2" maxlength="32" required>
+          <p class="form-error">مطلوب اسم المستخدم في ديسكورد</p>
+        </div>
+
+        <div class="form-group" id="field-discordID">
+          <label class="form-label" for="discordID">آيدي حسابك في ديسكورد</label>
+          <input type="text" id="discordID" name="discordID" class="form-input" placeholder="مثال: 123456789012345678" inputmode="numeric" required>
+          <p class="form-error">مطلوب الآيدي الرقمي (15 إلى 20 رقم)</p>
+          <p class="form-hint">فعّل وضع المطور في ديسكورد وانسخ الآيدي من الإعدادات.</p>
+        </div>
+
+        <div class="form-group" id="field-country">
+          <label class="form-label" for="country">بلدك</label>
+          <input type="text" id="country" name="country" class="form-input" list="countryList" placeholder="مثال: مصر" autocomplete="country-name" minlength="2" maxlength="40" required>
+          <datalist id="countryList">
+            <option value="السعودية"><option value="مصر"><option value="الإمارات">
+            <option value="الكويت"><option value="قطر"><option value="البحرين">
+            <option value="عُمان"><option value="الأردن"><option value="العراق">
+            <option value="سوريا"><option value="لبنان"><option value="فلسطين">
+            <option value="اليمن"><option value="ليبيا"><option value="تونس">
+            <option value="الجزائر"><option value="المغرب"><option value="السودان">
+          </datalist>
+          <p class="form-error">اكتب اسم بلدك</p>
+        </div>
+
+        <div class="form-group" id="field-hours">
+          <label class="form-label" for="hours">كام ساعة تقدر تتفاعل في اليوم؟</label>
+          <input type="number" id="hours" name="hours" class="form-input" placeholder="عدد الساعات" min="0" max="24" required>
+          <p class="form-error">اكتب رقم بين 0 و 24</p>
+        </div>
+
+        <div class="form-group" id="field-experience">
+          <label class="form-label" for="experience">خبراتك ومهاراتك</label>
+          <textarea id="experience" name="experience" class="form-textarea" placeholder="احكيلنا عن خبرتك باختصار..." minlength="10" maxlength="1000" required></textarea>
+          <p class="form-error">اكتب نبذة عن خبرتك (10 أحرف على الأقل)</p>
+        </div>
+
+        <!-- Cloudflare Turnstile -->
+        <div class="form-group text-center" id="field-turnstile">
+          <div class="cf-turnstile" data-sitekey="TURNSTILE_SITE_KEY" data-theme="dark" data-callback="onTurnstileSuccess"></div>
+          <p class="form-error">يرجى إكمال التحقق الأمني</p>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+            <span class="spinner"></span>
+            <span class="btn-label">إرسال الطلب</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-4">
+        <a href="index.html" class="btn btn-ghost">العودة للرئيسية</a>
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      <span data-footer-credit>𝐝𝐞𝐯 𝐛𝐲 (𝟕𝐚𝐦.𝐨)</span>
+    </footer>
+  </div>
+
+  <div class="toast-container">
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span class="toast-dot"></span>
+      <span id="toastMessage"></span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="apply.js"></script>
+</body>
+</html>
